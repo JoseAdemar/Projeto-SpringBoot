@@ -1,14 +1,23 @@
-package curso.springboot.model;
+
+  package curso.springboot.model;
 
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Usuario implements UserDetails {
@@ -21,6 +30,16 @@ public class Usuario implements UserDetails {
 	
 	private String login;
 	private String senha;
+	
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@JoinTable(name = "usuario_role",
+	joinColumns = @JoinColumn(name = "usuario_id",
+	referencedColumnName = "id",
+	table = "usuario"),
+	        inverseJoinColumns = @JoinColumn(name="role_id",
+			referencedColumnName = "id", table = "role")) // Parte complicada do código cria a tabela de acesso do usuário
+	@JsonIgnore
+	private List<Role> roles;
 	
 	
 	
@@ -53,7 +72,7 @@ public class Usuario implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		return null;
+		return roles;
 	}
 
 	@Override

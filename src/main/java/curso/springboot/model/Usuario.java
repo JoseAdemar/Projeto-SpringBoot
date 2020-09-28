@@ -17,8 +17,6 @@ import javax.persistence.OneToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class Usuario implements UserDetails {
 
@@ -38,7 +36,7 @@ public class Usuario implements UserDetails {
 	table = "usuario"),
 	        inverseJoinColumns = @JoinColumn(name="role_id",
 			referencedColumnName = "id", table = "role")) // Parte complicada do código cria a tabela de acesso do usuário
-	@JsonIgnore
+	
 	private List<Role> roles;
 	
 	
